@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Water Tracker</string>
+    <string name="title_activity_water_track_map">Map</string>
+</resources>
