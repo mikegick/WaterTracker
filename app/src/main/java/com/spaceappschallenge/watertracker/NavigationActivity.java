@@ -13,12 +13,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.os.StrictMode;
-import com.spaceappschallenge.watertracker.dao.GreetingDao;
-import com.spaceappschallenge.watertracker.dao.GreetingDaoImpl;
+import com.spaceappschallenge.watertracker.dao.MappingDao;
+import com.spaceappschallenge.watertracker.dao.MappingDaoImpl;
 
 public class NavigationActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
-    private GreetingDao greetingDao = new GreetingDaoImpl();
+
+    private MappingDao mappingDao = new MappingDaoImpl();
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
