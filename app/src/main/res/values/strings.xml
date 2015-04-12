@@ -31,5 +31,7 @@
     <string name="category">Category Value</string>
     <string name="waterUse">Water Use Value</string>
     <string name="discover">Date Modified Value</string>
-
+    <string name="sampleIdLabel">Sample ID:</string>
+    <string name="sampleId">Sample ID value</string>
+    <string name="sampleIdReturnMessage">Below is the sample ID for a water sample. WRITE THIS DATA DOWN. You will need it to update this observation upon completion of lab testing.</string>
 </resources>

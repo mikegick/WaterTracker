@@ -169,6 +169,7 @@ public class WaterTrackMap extends SupportMapFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which){
                         // Send new data to database
+                        sendObservation();
                         dialog.dismiss();
                     }
                 })
@@ -230,6 +231,7 @@ public class WaterTrackMap extends SupportMapFragment {
                 .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // Add logic here
+                        sendObservation();
                         dialog.dismiss();
                     }
                 })
@@ -238,7 +240,7 @@ public class WaterTrackMap extends SupportMapFragment {
                         dialog.dismiss();
                     }
                 })
-                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setIcon(android.R.drawable.ic_dialog_map)
                 .create();
 
         AlertDialog alert = new AlertDialog.Builder(this.getActivity())
@@ -259,7 +261,7 @@ public class WaterTrackMap extends SupportMapFragment {
                         dialog.dismiss();
                     }
                 })
-                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setIcon(android.R.drawable.ic_dialog_map)
                 .create();
         alert.show();
     }
@@ -297,6 +299,36 @@ public class WaterTrackMap extends SupportMapFragment {
         } catch (Exception e) {
             e.printStackTrace();
             return new LatLng(0,0);
+        }
+    }
+
+    private void sendObservation(){
+        try{
+            LayoutInflater inflater = getActivity().getLayoutInflater();
+            AlertDialog return_sample_id = new AlertDialog.Builder(this.getActivity())
+                    .setTitle("ATTENTION!!!")
+                    .setMessage("Observation was successfully logged to the Database.")
+                    .setView(inflater.inflate(R.layout.return_sample_id, null))
+                    .setPositiveButton("Done", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_info)
+                    .create();
+            return_sample_id.show();
+        } catch (Exception e) {
+            AlertDialog err_msg = new AlertDialog.Builder(this.getActivity())
+                    .setTitle("ERROR!!!")
+                    .setMessage("An error occurred writing the observation to the database. Please consider reporting this error to the developers.")
+                    .setNegativeButton("Okay", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_info)
+                    .create();
+            err_msg.show();
         }
     }
 
