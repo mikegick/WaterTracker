@@ -12,6 +12,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.spaceappschallenge.watertracker.dao.MappingDao;
+import com.spaceappschallenge.watertracker.dao.MappingDaoImpl;
+import com.spaceappschallenge.watertracker.model.DataPoint;
 
 import android.location.LocationManager;
 import android.location.Location;
@@ -19,14 +22,15 @@ import android.content.Intent;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
-import android.widget.EditText;
-
+import android.view.View;
+import android.widget.Spinner;
 import java.util.Calendar;
 
 public class WaterTrackMap extends SupportMapFragment {
     private GoogleMap mMap;
     private int minute;
     private boolean tracking;
+    private MappingDao mappingDao = new MappingDaoImpl();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -107,8 +111,8 @@ public class WaterTrackMap extends SupportMapFragment {
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                // Display additional info
-                viewDetails(/*marker identifier*/);
+                LatLng location = new LatLng(marker.getPosition().latitude, marker.getPosition().latitude);
+                viewDetails(location);
                 return false;
             }
         });
@@ -160,16 +164,39 @@ public class WaterTrackMap extends SupportMapFragment {
         mapView.show();
     }
 
-    private void viewDetails(/*marker identifier*/){
+    private void viewDetails(final LatLng location){
         LayoutInflater inflater = getActivity().getLayoutInflater();
+        final View thisView = inflater.inflate(R.layout.dialog_edit, null);
         final AlertDialog edit = new AlertDialog.Builder(this.getActivity())
                 .setTitle("Edit Data Point")
-                .setView(inflater.inflate(R.layout.dialog_edit, null))
+                .setView(thisView)
                 .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which){
-                        // Send new data to database
-                        sendObservation();
+                        DataPoint newPoint = new DataPoint();
+
+                        Spinner category = (Spinner)thisView.findViewById(R.id.category);
+                        if(category.getSelectedItem() == 0)
+                            newPoint.setCategory("stream");
+                        else if(category.getSelectedItem()==1)
+                            newPoint.setCategory("well");
+                        else if(category.getSelectedItem()==2)
+                            newPoint.setCategory("government");
+                        else if(category.getSelectedItem()==3)
+                            newPoint.setCategory("spring");
+
+                        Spinner waterUse = (Spinner)thisView.findViewById(R.id.waterUse);
+                        /*if(category.getSelectedItem() == 0)
+                            newPoint.setPurpose("drinking");
+                        else if(category.getSelectedItem()==1)
+                            newPoint.setPurpose("agriculture");
+                        else if(category.getSelectedItem()==2)
+                            newPoint.setPurpose("other");*/
+
+                        newPoint.setLatitude(location.latitude);
+                        newPoint.setLongitude(location.longitude);
+                        int sample_id = mappingDao.addDataPoint(newPoint);
+                        sendObservation(sample_id);
                         dialog.dismiss();
                     }
                 })
@@ -203,35 +230,56 @@ public class WaterTrackMap extends SupportMapFragment {
     }
     // Gets locations and category of previous observations and prints them to the map
     private void populateMarkers(){
-        mMap.addMarker(new MarkerOptions().position(new LatLng(getCurrentLocation().latitude+.01, getCurrentLocation().longitude+.01)));
-        mMap.addMarker(new MarkerOptions().position(new LatLng(getCurrentLocation().latitude+.0001, getCurrentLocation().longitude-.0001)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-        /*double bounds[] = getBounds();
-        // Query database
-        for(int i=0; i<sizeof(); i++){
-            if(array[i].category == "well")
-                mMap.addMarker(new MarkerOptions().position(new LatLng(array[i].latitude, array[i].longitude)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-            else if(array[i].category == "stream")
-                mMap.addMarker(new MarkerOptions().position(new LatLng(array[i].latitude, array[i].longitude)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
-            else if(array[i].category == "government")
-                mMap.addMarker(new MarkerOptions().position(new LatLng(array[i].latitude, array[i].longitude)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
-            else if(array[i].category == "spring")
-                mMap.addMarker(new MarkerOptions().position(new LatLng(array[i].latitude, array[i].longitude)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-        }*/
+        double bounds[] = getBounds();
+        DataPoint[] points = mappingDao.retrieveDataPoints(bounds[0], bounds[2], bounds[1], bounds[3]);
+        for(int i=0; i< points.length; i++){
+            if(points[i].getCategory().equals("well"))
+                mMap.addMarker(new MarkerOptions().position(new LatLng(points[i].getLatitude(), points[i].getLongitude())).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+            else if(points[i].getCategory().equals("stream"))
+                mMap.addMarker(new MarkerOptions().position(new LatLng(points[i].getLatitude(), points[i].getLongitude())).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+            else if(points[i].getCategory().equals("government"))
+                mMap.addMarker(new MarkerOptions().position(new LatLng(points[i].getLatitude(), points[i].getLongitude())).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+            else if(points[i].getCategory().equals("spring"))
+                mMap.addMarker(new MarkerOptions().position(new LatLng(points[i].getLatitude(), points[i].getLongitude())).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+        }
     }
 
     private void logSample(final LatLng location){
         LayoutInflater inflater = getActivity().getLayoutInflater();
+        final View thisView = inflater.inflate(R.layout.dialog_edit, null);
         double longitude = (double)Math.round(location.longitude * 10000) / 10000;
         double latitude = (double)Math.round(location.latitude * 10000) / 10000;
         mMap.clear();
         mMap.addMarker(new MarkerOptions().position(new LatLng(location.latitude, location.longitude)));
         final AlertDialog add = new AlertDialog.Builder(this.getActivity())
                 .setTitle("Input details")
-                .setView(inflater.inflate(R.layout.dialog_edit, null))
+                .setView(thisView)
                 .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        // Add logic here
-                        sendObservation();
+                        DataPoint newPoint = new DataPoint();
+
+                        Spinner category = (Spinner)thisView.findViewById(R.id.category);
+                        if(category.getSelectedItem() == 0)
+                            newPoint.setCategory("stream");
+                        else if(category.getSelectedItem()==1)
+                            newPoint.setCategory("well");
+                        else if(category.getSelectedItem()==2)
+                            newPoint.setCategory("government");
+                        else if(category.getSelectedItem()==3)
+                            newPoint.setCategory("spring");
+
+                        Spinner waterUse = (Spinner)thisView.findViewById(R.id.waterUse);
+                        /*if(category.getSelectedItem() == 0)
+                            newPoint.setPurpose("drinking");
+                        else if(category.getSelectedItem()==1)
+                            newPoint.setPurpose("agriculture");
+                        else if(category.getSelectedItem()==2)
+                            newPoint.setPurpose("other");*/
+
+                        newPoint.setLatitude(location.latitude);
+                        newPoint.setLongitude(location.longitude);
+                        int sample_id = mappingDao.addDataPoint(newPoint);
+                        sendObservation(sample_id);
                         dialog.dismiss();
                     }
                 })
@@ -302,8 +350,9 @@ public class WaterTrackMap extends SupportMapFragment {
         }
     }
 
-    private void sendObservation(){
+    private void sendObservation(final int sample_id){
         try{
+
             LayoutInflater inflater = getActivity().getLayoutInflater();
             AlertDialog return_sample_id = new AlertDialog.Builder(this.getActivity())
                     .setTitle("ATTENTION!!!")
