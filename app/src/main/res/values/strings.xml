@@ -24,10 +24,9 @@
     <string name="title_activity_water_track_map">Water Tracker</string>
     <string name="title_activity_navigation">NavigationActivity</string>
 
-    <string name="title_section1">Map Settings</string>
-    <string name="title_section2">Filter Map</string>
-    <string name="title_section3">Retrieve Sources</string>
-    <string name="title_section4">Recent Sources</string>
+    <string name="title_section1">Filter Map</string>
+    <string name="title_section2">My Submissions</string>
+    <string name="title_section3">Turn Tracking</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

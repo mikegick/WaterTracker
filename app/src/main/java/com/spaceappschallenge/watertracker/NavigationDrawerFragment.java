@@ -35,6 +35,19 @@ import java.util.List;
  */
 public class NavigationDrawerFragment extends Fragment {
     private MappingDao mappingDao = new MappingDaoImpl();
+    private boolean trackable;
+
+    public boolean isTrackable(){
+        return trackable;
+    }
+    public void setTrackable(boolean trackable) {
+        this.trackable = trackable;
+    }
+
+    public String getTrackingStatus() {
+        return isTrackable() ? "ON" : "OFF";
+    }
+
     /**
      * Remember the position of the selected item.
      */
@@ -98,6 +111,7 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerListView = (ListView) inflater.inflate(
                 R.layout.fragment_navigation_drawer, container, false);
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectItem(position);
@@ -110,8 +124,7 @@ public class NavigationDrawerFragment extends Fragment {
                 new String[]{
                         getString(R.string.title_section1),
                         getString(R.string.title_section2),
-                        getString(R.string.title_section3),
-                        getString(R.string.title_section4)
+                        getString(R.string.title_section3) +" " + getTrackingStatus()
                 }));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mDrawerListView;
@@ -261,8 +274,6 @@ public class NavigationDrawerFragment extends Fragment {
             Toast.makeText(getActivity(), i.toString() + " - " + i2.toString(), Toast.LENGTH_SHORT).show();
             return true;
         }
-
-
         return super.onOptionsItemSelected(item);
     }
 
