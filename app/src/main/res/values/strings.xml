@@ -1,4 +1,13 @@
 <resources>
+    <string name="about_line1">Water Tracker is an application designed to utilize crowd-sourced data to improve mapping of fresh water across the globe.</string>
+    <string name="about_line2">This app was developed by Robert Close, Matthew Thorne, Andrew Campbell, and Michael Gicking.</string>
+    <string name="about_line3">Water Tracker was developed over the weekend of April 11-12, 2015 as part of the NASA Space Apps Challenge.</string>
+
+    <string name="help_line1">Basic use instructions:</string>
+    <string name="help_line2">Tap on the map to log a new observation.\nPress and hold to change map view settings.\nTap on a marker to view/edit details.\nTap the target button to zoom to location.\nMarker color key:\n\tRed: Wells\n\tGreen: Springs\n\tBlue: Streams, lakes, rivers, etc.\n\tYellow: Government Facility</string>
+    <string name="help_line3">For additional information, please visit our page at www.rkclose.com/NASASpaceApps</string>
+    <string name="help_line4">Additional questions or bug reports should be directed to salisburywatertracker@gmail.com</string>
+
     <string-array name="categoryOptions">
         <item>Stream or Lake</item>
         <item>Well</item>
