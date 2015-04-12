@@ -1,4 +1,16 @@
 <resources>
+    <string-array name="categoryOptions">
+        <item>Stream or Lake</item>
+        <item>Well</item>
+        <item>Gov. Facility</item>
+        <item>Spring</item>
+    </string-array>
+    <string-array name="waterUseOptions">
+        <item>Drinking</item>
+        <item>Agriculture</item>
+        <item>Other</item>
+    </string-array>
+
     <string name="app_name">Water Tracker</string>
     <string name="title_activity_water_track_map">Water Tracker</string>
     <string name="title_activity_navigation">NavigationActivity</string>
@@ -12,4 +24,12 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_example">Example action</string>
+
+    <string name="categoryLabel">Category:</string>
+    <string name="waterUseLabel">Water use:</string>
+    <string name="discoverLabel">Modified date:</string>
+    <string name="category">Category Value</string>
+    <string name="waterUse">Water Use Value</string>
+    <string name="discover">Date Modified Value</string>
+
 </resources>

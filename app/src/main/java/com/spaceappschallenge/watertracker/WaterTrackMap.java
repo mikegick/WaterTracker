@@ -2,11 +2,11 @@ package com.spaceappschallenge.watertracker;
 
 import android.content.Context;
 import android.provider.Settings;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -18,6 +18,7 @@ import android.location.Location;
 import android.content.Intent;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.view.LayoutInflater;
 import android.widget.EditText;
 
 import java.util.Calendar;
@@ -87,8 +88,8 @@ public class WaterTrackMap extends SupportMapFragment {
         mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
             @Override
             public void onCameraChange(CameraPosition cameraPosition) {
-                mMap.clear();
-                populateMarkers();
+                //mMap.clear();
+                //populateMarkers();
             }
         });
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -125,6 +126,8 @@ public class WaterTrackMap extends SupportMapFragment {
         if(Calendar.getInstance().MINUTE - minute >= 1 && tracking) {
             minute = Calendar.getInstance().MINUTE;
             mMap.moveCamera(CameraUpdateFactory.newLatLng(getCurrentLocation()));
+            mMap.clear();
+            populateMarkers();
         }
     }
 
@@ -158,10 +161,10 @@ public class WaterTrackMap extends SupportMapFragment {
     }
 
     private void viewDetails(/*marker identifier*/){
-        EditText input = new EditText(this.getActivity());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
         final AlertDialog edit = new AlertDialog.Builder(this.getActivity())
                 .setTitle("Edit Data Point")
-                .setView(input)
+                .setView(inflater.inflate(R.layout.dialog_edit, null))
                 .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which){
@@ -180,7 +183,7 @@ public class WaterTrackMap extends SupportMapFragment {
 
         AlertDialog details = new AlertDialog.Builder(this.getActivity())
                 .setTitle("Details")
-                .setMessage("Details...")
+                .setView(inflater.inflate(R.layout.dialog_details, null))
                 .setPositiveButton("Done", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
@@ -199,7 +202,8 @@ public class WaterTrackMap extends SupportMapFragment {
     }
     // Gets locations and category of previous observations and prints them to the map
     private void populateMarkers(){
-        mMap.addMarker(new MarkerOptions().position(new LatLng(getCurrentLocation().latitude+1, getCurrentLocation().longitude+1)));
+        mMap.addMarker(new MarkerOptions().position(new LatLng(getCurrentLocation().latitude+.01, getCurrentLocation().longitude+.01)));
+        mMap.addMarker(new MarkerOptions().position(new LatLng(getCurrentLocation().latitude+.0001, getCurrentLocation().longitude-.0001)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
         /*double bounds[] = getBounds();
         // Query database
         for(int i=0; i<sizeof(); i++){
@@ -215,16 +219,34 @@ public class WaterTrackMap extends SupportMapFragment {
     }
 
     private void logSample(final LatLng location){
+        LayoutInflater inflater = getActivity().getLayoutInflater();
         double longitude = (double)Math.round(location.longitude * 10000) / 10000;
         double latitude = (double)Math.round(location.latitude * 10000) / 10000;
         mMap.clear();
         mMap.addMarker(new MarkerOptions().position(new LatLng(location.latitude, location.longitude)));
+        final AlertDialog add = new AlertDialog.Builder(this.getActivity())
+                .setTitle("Input details")
+                .setView(inflater.inflate(R.layout.dialog_edit, null))
+                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Add logic here
+                        dialog.dismiss();
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .create();
+
         AlertDialog alert = new AlertDialog.Builder(this.getActivity())
                 .setTitle("Log an observation at this location?")
                 .setMessage("Lat: " + latitude + " Lon: " + longitude)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        // Add logic here
+                        add.show();
                         mMap.clear();
                         populateMarkers();
                         dialog.dismiss();
@@ -289,7 +311,7 @@ public class WaterTrackMap extends SupportMapFragment {
     }
 
     // Gets the latitude and longitude of the four sides of the viewable area
-    private double[] getBounds(){
+    public double[] getBounds(){
         double maxLongitude, maxLatitude, minLongitude, minLatitude;
         maxLatitude = mMap.getProjection().getVisibleRegion().latLngBounds.northeast.latitude;
         maxLongitude = mMap.getProjection().getVisibleRegion().latLngBounds.northeast.longitude;

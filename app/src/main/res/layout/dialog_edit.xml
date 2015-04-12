@@ -1,6 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    >
+
+    <TextView
+        android:text="@string/categoryLabel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+    <Spinner
+        android:id="@+id/category"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/categoryOptions"
+        />
+    <TextView
+        android:text="@string/waterUseLabel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+    <Spinner
+        android:id="@+id/waterUse"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/waterUseOptions"
+        />
+
+    <!--<TextView
+        android:text="@string/discoverLabel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <EditText
+        android:id="@+id/discover"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />-->
 
 </LinearLayout>
