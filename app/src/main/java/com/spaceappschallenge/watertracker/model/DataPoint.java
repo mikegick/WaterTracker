@@ -6,6 +6,7 @@ public class DataPoint {
     private String discDate;
     private String category;
     private int dataPointID;
+    private String purpose;
 
     public double getLatitude() {
         return latitude;
@@ -38,6 +39,14 @@ public class DataPoint {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public String getPurpose() {
+        return purpose;
+    }
+
+    public void setPurpose(String purpose) {
+        this.purpose = purpose;
     }
 
     public int getDataPointID() {

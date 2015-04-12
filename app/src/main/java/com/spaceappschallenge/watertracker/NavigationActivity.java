@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
@@ -51,6 +52,24 @@ public class NavigationActivity extends ActionBarActivity
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
+        if(position == 0) {
+
+        }
+        else if(position == 1) {
+
+        }
+        else if(position ==2) {
+            WaterTrackMap mapFragment = (WaterTrackMap) getSupportFragmentManager().findFragmentById(R.id.map);
+            mapFragment.setTracking(!mapFragment.getTracking());
+            NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.navigation_drawer);
+            drawerFragment.setTrackable(!drawerFragment.isTrackable());
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.navigation_drawer,(NavigationDrawerFragment) getSupportFragmentManager()
+                            .findFragmentById(R.id.navigation_drawer_refresh))
+                    .commit();
+        }
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
@@ -99,7 +118,6 @@ public class NavigationActivity extends ActionBarActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         /**
         if (id == R.id.action_settings) {
