@@ -27,8 +27,15 @@ public class MappingDaoImpl implements MappingDao {
     }
 
     @Override
-    public String modifyDataPoint(int userId, int dpId, String category) {
-        return null;
+    public Integer modifyDataPoint(int userId, int dpId, String category) {
+        final String fullUrl = "http://192.168.200.86:8080/" +
+                "mapping/water/modifyDataPoint?userID={userID}&dpid={dpid}&category={category}";
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+        //userId defaulting to 1 for now until login system
+        Integer response = restTemplate.getForObject(fullUrl, Integer.class,
+                userId,dpId, category);
+        return response;
     }
 
     @Override
@@ -47,7 +54,16 @@ public class MappingDaoImpl implements MappingDao {
     }
 
     @Override
-    public String recentUserDataPoints(int userId) {
-        return null;
+    public DataPoint[] recentUserDataPoints(int userId) {
+        final String fullUrl = "http://192.168.200.86:8080/mapping/water/userDataPoints?userID={userID}";
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+        //userId defaulting to 1 for now until login system
+        /*ResponseEntity<DataPoint[]> responseEntity = restTemplate.postForObject(url, DataPoint[].class);
+        return responseEntity.getBody();
+       */
+        DataPoint[] response = restTemplate.getForObject(fullUrl, DataPoint[].class, userId);
+        return response;
+
     }
 }
