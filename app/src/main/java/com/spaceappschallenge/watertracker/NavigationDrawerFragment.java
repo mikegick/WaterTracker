@@ -22,9 +22,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.spaceappschallenge.watertracker.model.Greeting;
-import com.spaceappschallenge.watertracker.dao.GreetingDao;
-import com.spaceappschallenge.watertracker.dao.GreetingDaoImpl;
+import com.spaceappschallenge.watertracker.dao.MappingDao;
+import com.spaceappschallenge.watertracker.dao.MappingDaoImpl;
+import com.spaceappschallenge.watertracker.model.DataPoint;
+
+import java.util.List;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -32,7 +34,7 @@ import com.spaceappschallenge.watertracker.dao.GreetingDaoImpl;
  * design guidelines</a> for a complete explanation of the behaviors implemented here.
  */
 public class NavigationDrawerFragment extends Fragment {
-    private GreetingDao greetingDao = new GreetingDaoImpl();
+    private MappingDao mappingDao = new MappingDaoImpl();
     /**
      * Remember the position of the selected item.
      */
@@ -253,8 +255,10 @@ public class NavigationDrawerFragment extends Fragment {
         }
 
         if (item.getItemId() == R.id.action_example) {
-            Greeting greeting = greetingDao.getGreeting("Matt");
-            Toast.makeText(getActivity(), greeting.getId() + " - " + greeting.getContent(), Toast.LENGTH_SHORT).show();
+            DataPoint[] dataPoints = mappingDao.retrieveDataPoints(70.76, 50.345345, 100, 49);
+            Integer i = dataPoints[0].getDataPointID();
+            Integer i2 = dataPoints[1].getDataPointID();
+            Toast.makeText(getActivity(), i.toString() + " - " + i2.toString(), Toast.LENGTH_SHORT).show();
             return true;
         }
 
