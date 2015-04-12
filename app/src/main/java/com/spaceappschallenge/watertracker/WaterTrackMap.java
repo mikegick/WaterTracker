@@ -94,8 +94,7 @@ public class WaterTrackMap extends SupportMapFragment {
         mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
             @Override
             public void onCameraChange(CameraPosition cameraPosition) {
-                //mMap.clear();
-                //populateMarkers();
+                updateMap();
             }
         });
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -113,7 +112,7 @@ public class WaterTrackMap extends SupportMapFragment {
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                LatLng location = new LatLng(marker.getPosition().latitude, marker.getPosition().latitude);
+                LatLng location = new LatLng(marker.getPosition().latitude, marker.getPosition().longitude);
                 viewDetails(location);
                 return false;
             }
@@ -178,22 +177,22 @@ public class WaterTrackMap extends SupportMapFragment {
                         DataPoint newPoint = new DataPoint();
 
                         Spinner category = (Spinner)thisView.findViewById(R.id.category);
-                        if(category.getSelectedItem() == 0)
-                            newPoint.setCategory("stream");
-                        else if(category.getSelectedItem()==1)
-                            newPoint.setCategory("well");
-                        else if(category.getSelectedItem()==2)
-                            newPoint.setCategory("government");
-                        else if(category.getSelectedItem()==3)
-                            newPoint.setCategory("spring");
+                        if(category.getSelectedItem().toString().equals("Stream or Lake"))
+                            newPoint.setCategory("Stream or Lake");
+                        else if(category.getSelectedItem().toString().equals("Well"))
+                            newPoint.setCategory("Well");
+                        else if(category.getSelectedItem().toString().equals("Gov. Facility"))
+                            newPoint.setCategory("Gov. Facility");
+                        else if(category.getSelectedItem().toString().equals("Spring"))
+                            newPoint.setCategory("Spring");
 
                         Spinner waterUse = (Spinner)thisView.findViewById(R.id.waterUse);
-                        if(category.getSelectedItem() == 0)
-                            newPoint.setPurpose("drinking");
-                        else if(category.getSelectedItem()==1)
-                            newPoint.setPurpose("agriculture");
-                        else if(category.getSelectedItem()==2)
-                            newPoint.setPurpose("other");
+                        if(waterUse.getSelectedItem().toString().equals("Drinking"))
+                            newPoint.setPurpose("Drinking");
+                        else if(waterUse.getSelectedItem().toString().equals("Agriculture"))
+                            newPoint.setPurpose("Agriculture");
+                        else if(waterUse.getSelectedItem().toString().equals("Other"))
+                            newPoint.setPurpose("Other");
 
                         newPoint.setLatitude(location.latitude);
                         newPoint.setLongitude(location.longitude);
@@ -263,11 +262,11 @@ public class WaterTrackMap extends SupportMapFragment {
                         Spinner category = (Spinner)thisView.findViewById(R.id.category);
                         if(category.getSelectedItem().toString().equals("Stream or Lake"))
                             newPoint.setCategory("Stream or Lake");
-                        else if(category.getSelectedItem()==1)
+                        else if(category.getSelectedItem().toString().equals("Well"))
                             newPoint.setCategory("Well");
-                        else if(category.getSelectedItem()==2)
+                        else if(category.getSelectedItem().toString().equals("Gov. Facility"))
                             newPoint.setCategory("Gov. Facility");
-                        else if(category.getSelectedItem()==3)
+                        else if(category.getSelectedItem().toString().equals("Spring"))
                             newPoint.setCategory("Spring");
 
                         Spinner waterUse = (Spinner)thisView.findViewById(R.id.waterUse);
@@ -357,7 +356,7 @@ public class WaterTrackMap extends SupportMapFragment {
             LayoutInflater inflater = getActivity().getLayoutInflater();
             View thisView = inflater.inflate(R.layout.return_sample_id, null);
             TextView sample_id_view = (TextView)thisView.findViewById(R.id.sample_id);
-            //sample_id_view.setText(sample_id);
+            sample_id_view.setText(getString(sample_id));
             AlertDialog return_sample_id = new AlertDialog.Builder(this.getActivity())
                     .setTitle("ATTENTION!!!")
                     .setMessage("Observation was successfully logged to the Database.")
