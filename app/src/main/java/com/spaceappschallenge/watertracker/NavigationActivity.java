@@ -67,7 +67,7 @@ public class NavigationActivity extends ActionBarActivity
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
                     .replace(R.id.navigation_drawer,(NavigationDrawerFragment) getSupportFragmentManager()
-                            .findFragmentById(R.id.navigation_drawer_refresh))
+                            .findFragmentById(R.id.navigation_drawer))
                     .commit();
         }
         // update the main content by replacing fragments

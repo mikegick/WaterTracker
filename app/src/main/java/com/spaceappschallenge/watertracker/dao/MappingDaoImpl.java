@@ -22,7 +22,7 @@ public class MappingDaoImpl implements MappingDao {
         restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
         //userId defaulting to 1 for now until login system
         Integer response = restTemplate.getForObject(fullUrl, Integer.class,
-                1,dataPoint.getLatitude(), dataPoint.getLongitude(),dataPoint.getCategory(),dataPoint.getPurpose());
+                20,dataPoint.getLatitude(), dataPoint.getLongitude(),dataPoint.getCategory(),dataPoint.getPurpose());
         return response;
     }
 

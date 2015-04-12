@@ -235,13 +235,13 @@ public class WaterTrackMap extends SupportMapFragment {
         double bounds[] = getBounds();
         DataPoint[] points = mappingDao.retrieveDataPoints(bounds[0], bounds[2], bounds[1], bounds[3]);
         for(int i=0; i< points.length; i++){
-            if(points[i].getCategory().equals("well"))
+            if(points[i].getCategory().equals("Well"))
                 mMap.addMarker(new MarkerOptions().position(new LatLng(points[i].getLatitude(), points[i].getLongitude())).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-            else if(points[i].getCategory().equals("stream"))
+            else if(points[i].getCategory().equals("Stream or Lake"))
                 mMap.addMarker(new MarkerOptions().position(new LatLng(points[i].getLatitude(), points[i].getLongitude())).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
-            else if(points[i].getCategory().equals("government"))
+            else if(points[i].getCategory().equals("Gov. Facility"))
                 mMap.addMarker(new MarkerOptions().position(new LatLng(points[i].getLatitude(), points[i].getLongitude())).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
-            else if(points[i].getCategory().equals("spring"))
+            else if(points[i].getCategory().equals("Spring"))
                 mMap.addMarker(new MarkerOptions().position(new LatLng(points[i].getLatitude(), points[i].getLongitude())).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
         }
     }
@@ -261,22 +261,22 @@ public class WaterTrackMap extends SupportMapFragment {
                         DataPoint newPoint = new DataPoint();
 
                         Spinner category = (Spinner)thisView.findViewById(R.id.category);
-                        if(category.getSelectedItem() == 0)
-                            newPoint.setCategory("stream");
+                        if(category.getSelectedItem().toString().equals("Stream or Lake"))
+                            newPoint.setCategory("Stream or Lake");
                         else if(category.getSelectedItem()==1)
-                            newPoint.setCategory("well");
+                            newPoint.setCategory("Well");
                         else if(category.getSelectedItem()==2)
-                            newPoint.setCategory("government");
+                            newPoint.setCategory("Gov. Facility");
                         else if(category.getSelectedItem()==3)
-                            newPoint.setCategory("spring");
+                            newPoint.setCategory("Spring");
 
                         Spinner waterUse = (Spinner)thisView.findViewById(R.id.waterUse);
-                        if(category.getSelectedItem() == 0)
-                            newPoint.setPurpose("drinking");
-                        else if(category.getSelectedItem()==1)
-                            newPoint.setPurpose("agriculture");
-                        else if(category.getSelectedItem()==2)
-                            newPoint.setPurpose("other");
+                        if(waterUse.getSelectedItem().toString().equals("Drinking"))
+                            newPoint.setPurpose("Drinking");
+                        else if(waterUse.getSelectedItem().toString().equals("Agriculture"))
+                            newPoint.setPurpose("Agriculture");
+                        else if(waterUse.getSelectedItem().toString().equals("Other"))
+                            newPoint.setPurpose("Other");
 
                         newPoint.setLatitude(location.latitude);
                         newPoint.setLongitude(location.longitude);
@@ -357,11 +357,11 @@ public class WaterTrackMap extends SupportMapFragment {
             LayoutInflater inflater = getActivity().getLayoutInflater();
             View thisView = inflater.inflate(R.layout.return_sample_id, null);
             TextView sample_id_view = (TextView)thisView.findViewById(R.id.sample_id);
-            sample_id_view.setText(sample_id);
+            //sample_id_view.setText(sample_id);
             AlertDialog return_sample_id = new AlertDialog.Builder(this.getActivity())
                     .setTitle("ATTENTION!!!")
                     .setMessage("Observation was successfully logged to the Database.")
-                    .setView(inflater.inflate(R.layout.return_sample_id, null))
+                    .setView(thisView)
                     .setPositiveButton("Done", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
