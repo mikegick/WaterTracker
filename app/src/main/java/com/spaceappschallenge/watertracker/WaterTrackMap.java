@@ -1,5 +1,6 @@
 package com.spaceappschallenge.watertracker;
 
+import android.content.Context;
 import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -19,20 +20,25 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import java.util.Calendar;
 
-public class WaterTrackMap extends FragmentActivity {
+public class WaterTrackMap extends SupportMapFragment {
     private GoogleMap mMap;
     private int minute;
     private boolean tracking;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_water_track_map);
+        //this.getActivity().setContentView(R.layout.fragment_navigation);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setUpMapIfNeeded();
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         setUpMapIfNeeded();
     }
@@ -56,8 +62,7 @@ public class WaterTrackMap extends FragmentActivity {
         // Do a null check to confirm that we have not already instantiated the map.
         if (mMap == null) {
             // Try to obtain the map from the SupportMapFragment.
-            mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
-                    .getMap();
+            mMap = this.getMap();
             mMap.setMyLocationEnabled(true);
             mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
             // Check if we were successful in obtaining the map.
@@ -124,7 +129,7 @@ public class WaterTrackMap extends FragmentActivity {
     // Provides user with a popup box to choose map view mode
     // Options for map view mode are street view, street + earth, and terrain/elevation
     private void setMapViewMode(){
-        AlertDialog mapView = new AlertDialog.Builder(this)
+        AlertDialog mapView = new AlertDialog.Builder(this.getActivity())
                 .setTitle("Choose Map View")
                 .setCancelable(true)
                 .setPositiveButton("Street", new DialogInterface.OnClickListener() {
@@ -151,7 +156,7 @@ public class WaterTrackMap extends FragmentActivity {
     }
 
     private void viewDetails(/*marker identifier*/){
-        AlertDialog details = new AlertDialog.Builder(this)
+        AlertDialog details = new AlertDialog.Builder(this.getActivity())
                 .setTitle("Details")
                 .setMessage("Details...")
                 .setPositiveButton("Done", new DialogInterface.OnClickListener() {
@@ -185,7 +190,7 @@ public class WaterTrackMap extends FragmentActivity {
         double latitude = (double)Math.round(location.latitude * 10000) / 10000;
         mMap.clear();
         mMap.addMarker(new MarkerOptions().position(new LatLng(location.latitude, location.longitude)));
-        AlertDialog alert = new AlertDialog.Builder(this)
+        AlertDialog alert = new AlertDialog.Builder(this.getActivity())
                 .setTitle("Log an observation at this location?")
                 .setMessage("Lat: " + latitude + " Lon: " + longitude)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -214,7 +219,7 @@ public class WaterTrackMap extends FragmentActivity {
             if(mMap.getMyLocation() != null){
                 return new LatLng(mMap.getMyLocation().getLatitude(), mMap.getMyLocation().getLongitude());
             } else {
-                LocationManager locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
+                LocationManager locationManager = (LocationManager) this.getActivity().getSystemService(Context.LOCATION_SERVICE);
                 //Check to make sure location services are enabled
                 boolean GPS_Enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
                 boolean Network_Enabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
@@ -223,7 +228,7 @@ public class WaterTrackMap extends FragmentActivity {
                 } else if (Network_Enabled) { //Get location from Network
                     return new LatLng(locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER).getLatitude(), locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER).getLongitude());
                 } else {
-                    AlertDialog alert = new AlertDialog.Builder(this)
+                    AlertDialog alert = new AlertDialog.Builder(this.getActivity())
                             .setTitle("Geolocation Failed")
                             .setMessage("We were unable to find your location. Please make sure location services are enabled on your phone and restart the application.")
                             .setNegativeButton("Close", new DialogInterface.OnClickListener() {
