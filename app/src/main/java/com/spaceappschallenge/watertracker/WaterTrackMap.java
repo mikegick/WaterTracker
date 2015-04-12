@@ -24,6 +24,8 @@ import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Spinner;
+import android.widget.TextView;
+
 import java.util.Calendar;
 
 public class WaterTrackMap extends SupportMapFragment {
@@ -186,12 +188,12 @@ public class WaterTrackMap extends SupportMapFragment {
                             newPoint.setCategory("spring");
 
                         Spinner waterUse = (Spinner)thisView.findViewById(R.id.waterUse);
-                        /*if(category.getSelectedItem() == 0)
+                        if(category.getSelectedItem() == 0)
                             newPoint.setPurpose("drinking");
                         else if(category.getSelectedItem()==1)
                             newPoint.setPurpose("agriculture");
                         else if(category.getSelectedItem()==2)
-                            newPoint.setPurpose("other");*/
+                            newPoint.setPurpose("other");
 
                         newPoint.setLatitude(location.latitude);
                         newPoint.setLongitude(location.longitude);
@@ -269,12 +271,12 @@ public class WaterTrackMap extends SupportMapFragment {
                             newPoint.setCategory("spring");
 
                         Spinner waterUse = (Spinner)thisView.findViewById(R.id.waterUse);
-                        /*if(category.getSelectedItem() == 0)
+                        if(category.getSelectedItem() == 0)
                             newPoint.setPurpose("drinking");
                         else if(category.getSelectedItem()==1)
                             newPoint.setPurpose("agriculture");
                         else if(category.getSelectedItem()==2)
-                            newPoint.setPurpose("other");*/
+                            newPoint.setPurpose("other");
 
                         newPoint.setLatitude(location.latitude);
                         newPoint.setLongitude(location.longitude);
@@ -352,8 +354,10 @@ public class WaterTrackMap extends SupportMapFragment {
 
     private void sendObservation(final int sample_id){
         try{
-
             LayoutInflater inflater = getActivity().getLayoutInflater();
+            View thisView = inflater.inflate(R.layout.return_sample_id, null);
+            TextView sample_id_view = (TextView)thisView.findViewById(R.id.sample_id);
+            sample_id_view.setText(sample_id);
             AlertDialog return_sample_id = new AlertDialog.Builder(this.getActivity())
                     .setTitle("ATTENTION!!!")
                     .setMessage("Observation was successfully logged to the Database.")
