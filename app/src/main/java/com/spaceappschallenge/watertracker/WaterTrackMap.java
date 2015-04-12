@@ -18,6 +18,8 @@ import android.location.Location;
 import android.content.Intent;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.widget.EditText;
+
 import java.util.Calendar;
 
 public class WaterTrackMap extends SupportMapFragment {
@@ -156,6 +158,26 @@ public class WaterTrackMap extends SupportMapFragment {
     }
 
     private void viewDetails(/*marker identifier*/){
+        EditText input = new EditText(this.getActivity());
+        final AlertDialog edit = new AlertDialog.Builder(this.getActivity())
+                .setTitle("Edit Data Point")
+                .setView(input)
+                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which){
+                        // Send new data to database
+                        dialog.dismiss();
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which){
+                        dialog.dismiss();
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_map)
+                .create();
+
         AlertDialog details = new AlertDialog.Builder(this.getActivity())
                 .setTitle("Details")
                 .setMessage("Details...")
@@ -164,7 +186,14 @@ public class WaterTrackMap extends SupportMapFragment {
                         dialog.dismiss();
                     }
                 })
-                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setNegativeButton("Edit", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        edit.show();
+                        dialog.dismiss();
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_map)
                 .create();
         details.show();
     }
