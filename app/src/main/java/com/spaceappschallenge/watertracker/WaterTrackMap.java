@@ -1,4 +1,3 @@
-//If you are reading this and are a judge for NASA spaceapps challenge, you are in the wrong branch
 package com.spaceappschallenge.watertracker;
 
 import android.content.Context;
