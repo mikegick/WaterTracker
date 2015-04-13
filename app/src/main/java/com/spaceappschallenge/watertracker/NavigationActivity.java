@@ -1,6 +1,8 @@
 package com.spaceappschallenge.watertracker;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
@@ -69,6 +71,34 @@ public class NavigationActivity extends ActionBarActivity
                     .replace(R.id.navigation_drawer,(NavigationDrawerFragment) getSupportFragmentManager()
                             .findFragmentById(R.id.navigation_drawer))
                     .commit();
+        }
+        else if(position==3){
+            LayoutInflater inflater = this.getLayoutInflater();
+            AlertDialog help = new AlertDialog.Builder(this)
+                    .setTitle("Help")
+                    .setView(inflater.inflate(R.layout.help, null))
+                    .setPositiveButton("Close", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .create();
+            help.show();
+        }
+        else if(position==4){
+            LayoutInflater inflater = this.getLayoutInflater();
+            AlertDialog about = new AlertDialog.Builder(this)
+                    .setTitle("About")
+                    .setView(inflater.inflate(R.layout.about, null))
+                    .setPositiveButton("Close", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .create();
+            about.show();
         }
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
