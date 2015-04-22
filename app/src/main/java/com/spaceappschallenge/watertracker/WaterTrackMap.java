@@ -355,8 +355,6 @@ public class WaterTrackMap extends SupportMapFragment {
         try{
             LayoutInflater inflater = getActivity().getLayoutInflater();
             View thisView = inflater.inflate(R.layout.return_sample_id, null);
-            TextView sample_id_view = (TextView)thisView.findViewById(R.id.sample_id);
-            sample_id_view.setText(getString(sample_id));
             AlertDialog return_sample_id = new AlertDialog.Builder(this.getActivity())
                     .setTitle("ATTENTION!!!")
                     .setMessage("Observation was successfully logged to the Database.")
@@ -372,7 +370,7 @@ public class WaterTrackMap extends SupportMapFragment {
         } catch (Exception e) {
             AlertDialog err_msg = new AlertDialog.Builder(this.getActivity())
                     .setTitle("ERROR!!!")
-                    .setMessage("An error occurred writing the observation to the database. Please consider reporting this error to the developers.")
+                    .setMessage(e.getMessage() + "/n" + "/n" + e.getLocalizedMessage())
                     .setNegativeButton("Okay", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
