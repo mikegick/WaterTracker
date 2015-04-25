@@ -3,10 +3,11 @@ package com.spaceappschallenge.watertracker;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.res.Resources;
+import android.content.res.AssetManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
@@ -16,6 +17,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.os.StrictMode;
+import java.io.InputStream;
+import java.io.IOException;
+import java.util.Properties;
 import com.spaceappschallenge.watertracker.dao.MappingDao;
 import com.spaceappschallenge.watertracker.dao.MappingDaoImpl;
 
@@ -50,6 +54,7 @@ public class NavigationActivity extends ActionBarActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+        loadProperties();
     }
 
     @Override
@@ -106,6 +111,21 @@ public class NavigationActivity extends ActionBarActivity
                 .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
                 .commit();
     }
+
+   public void loadProperties() {
+       Resources resources = this.getResources();
+       AssetManager assetManager = resources.getAssets();
+       try {
+           InputStream inputStream = assetManager.open("webservice.properties");
+           Properties properties = new Properties();
+           properties.load(inputStream);
+           System.out.println("The properties are now loaded");
+           System.out.println("properties: " + properties);
+       } catch (IOException e) {
+           System.err.println("Failed to open webservice property file");
+           e.printStackTrace();
+       }
+   }
 
     public void onSectionAttached(int number) {
         switch (number) {

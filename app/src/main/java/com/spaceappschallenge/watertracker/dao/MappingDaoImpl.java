@@ -1,8 +1,6 @@
 package com.spaceappschallenge.watertracker.dao;
 
 import com.spaceappschallenge.watertracker.model.DataPoint;
-
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
@@ -12,11 +10,10 @@ import java.util.List;
  * Created by Andrew on 4/11/2015.
  */
 public class MappingDaoImpl implements MappingDao {
-    private String url;
 
     @Override
     public Integer addDataPoint(DataPoint dataPoint) {
-        final String fullUrl = "http://192.168.200.86:8080/mapping/water/addDataPoint?userID={userID}&latitude={latitude}&" +
+        final String fullUrl = "http://campbellonsoftware.com:8080/mapping-ws-1.0.0-SNAPSHOT/mapping/water/addDataPoint/?userID={userID}&latitude={latitude}&" +
                 "longitude={longitude}&category={category}&purpose={purpose}";
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
@@ -28,7 +25,7 @@ public class MappingDaoImpl implements MappingDao {
 
     @Override
     public Integer modifyDataPoint(int userId, int dpId, String category, String purpose) {
-        final String fullUrl = "http://192.168.200.86:8080/mapping/water/modifyDataPoint?" +
+        final String fullUrl = "http://campbellonsoftware.com:8080/mapping-ws-1.0.0-SNAPSHOT/mapping/water/modifyDataPoint/?" +
                 "userID={userID}&dpid={dpid}&category={category}&purpose={purpose}";
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
@@ -40,7 +37,7 @@ public class MappingDaoImpl implements MappingDao {
 
     @Override
     public DataPoint[] retrieveDataPoints(double maxLatitude, double minLatitude, double maxLongitude, double minLongitude) {
-        final String fullUrl = "http://192.168.200.86:8080/mapping/water/retrieveDataPoints?" +
+        final String fullUrl = "http://campbellonsoftware.com:8080/mapping-ws-1.0.0-SNAPSHOT/mapping/water/retrieveDataPoints/?" +
                 "maxlatitude={maxlatitude}&minlatitude={minlatitude}&maxlongitude={maxlongitude}&minlongitude={minlongitude}";
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
@@ -51,7 +48,7 @@ public class MappingDaoImpl implements MappingDao {
 
     @Override
     public DataPoint[] recentUserDataPoints(int userId) {
-        final String fullUrl = "http://192.168.200.86:8080/mapping/water/userDataPoints?userID={userID}";
+        final String fullUrl = "http://campbellonsoftware.com:8080/mapping-ws-1.0.0-SNAPSHOT/mapping/water/userDataPoints/?userID={userID}";
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
         DataPoint[] response = restTemplate.getForObject(fullUrl, DataPoint[].class, userId);
